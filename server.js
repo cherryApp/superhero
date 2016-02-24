@@ -1,6 +1,7 @@
 // Beolvassuk a szükséges csomagokat.
 var express = require('express');
 var fs = require('fs');
+var itf = require('./my_modules/itf_module');
 
 // Globális változók.
 var port = 3333;
@@ -12,10 +13,15 @@ var app = express();
 // Statikus fájlok.
 app.use(express.static(staticDir));
 
+app.use(function (req, res, next) {
+    console.log(req.url);
+    next();
+});
+
 // Definiáljuk a szerver működését.
 app.get('/', function (req, res) {
-    fs.readFile('./'+staticDir+'/index.html', 'utf8', function (err, data) {
-        res.send( data );
+    fs.readFile('./' + staticDir + '/index.html', 'utf8', function (err, data) {
+        res.send(data);
     });
 });
 
@@ -27,16 +33,16 @@ function handleUsers(req, res) {
         // var path = req.url.split( '/' );
         var users = JSON.parse(data);
         var _user = {};
-        
+
         // Ha nem kaptunk id-t.
-        if ( !req.params.id ) {
+        if (!req.params.id) {
             _user = users;
         } else {
             for (var k in users) {
                 if (req.params.id == users[k].id) {
                     _user = users[k];
                 }
-            }            
+            }
         }
 
         res.send(JSON.stringify(_user));
@@ -53,4 +59,4 @@ app.get('/users/:id*?', function (req, res) {
 // Megadjuk hogy a szerver melyik portot figyelje.
 app.listen(port);
 
-console.log( "Server running in localhost:"+port );
+console.log("Server running in localhost:" + port);
