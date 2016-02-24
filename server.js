@@ -9,19 +9,25 @@ var staticDir = 'build';
 
 // Létrehozunk egy express szerver példányt.
 var app = express();
+app.set('view engine', 'jade');
+app.set('views', './src/view')
 
 // Statikus fájlok.
 app.use(express.static(staticDir));
 
 app.use(function (req, res, next) {
-    console.log(req.url);
-    next();
+    if ( req.headers['x-requested-with'] == 'XMLHttpRequest' ) {
+        res.send( JSON.stringify( {'hello': 'world'}) );
+    } else {
+        next();
+    }
 });
 
 // Definiáljuk a szerver működését.
 app.get('/', function (req, res) {
-    fs.readFile('./' + staticDir + '/index.html', 'utf8', function (err, data) {
-        res.send(data);
+    res.render('index', {
+        title: 'ItFactory Web Superhero',
+        message: 'Yes, it is!'
     });
 });
 
