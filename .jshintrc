@@ -4,6 +4,7 @@
     "eqeqeq": true,
     "undef": false,
     "globals": {
-        "jQuery": true
+        "jQuery": true,
+        "$": true
     }
 }
