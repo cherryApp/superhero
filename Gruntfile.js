@@ -11,7 +11,7 @@ module.exports = function (grunt) {
                 src: [
                     'src/vendor/jquery/dist/jquery.min.js',
                     'src/vendor/bootstrap/dist/js/bootstrap.min.js',
-                    'src/vendor/angular/angular.min.js',
+                    'src/vendor/angular/angular.js',
                     'src/js/*.js'
                     ],
                 dest: 'build/js/all.js'
@@ -73,6 +73,20 @@ module.exports = function (grunt) {
                     dest: 'build/img/'
                 }]
             }
+        },
+        cssmin: {
+            options: {
+                shorthandCompacting: false,
+                roundingPrecision: -1
+            },
+            target: {
+                files: {
+                    'build/css/all.min.css': [
+                        'src/vendor/bootstrap/dist/css/bootstrap.min.css',
+                        'src/vendor/bootstrap/dist/css/bootstrap-theme.min.css'
+                    ]
+                }
+            }
         }
     });
 
@@ -83,9 +97,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-imagemin');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
 
     // Default task(s).
     grunt.registerTask('default', ['watch']);
-    grunt.registerTask('dev', ['clean', 'copy', 'uglify']);
+    grunt.registerTask('dev', ['clean', 'copy', 'uglify', 'cssmin']);
 
 };

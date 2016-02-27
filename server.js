@@ -68,15 +68,15 @@ app.set('views', './src/view');
 // Statikus fájlok.
 app.use(express.static(staticDir));
 
-app.use(function (req, res, next) {
-  if (req.headers['x-requested-with'] == 'XMLHttpRequest') {
-    res.send(JSON.stringify({
-      'hello': 'world'
-    }));
-  } else {
-    next();
-  }
-});
+//app.use(function (req, res, next) {
+//  if (req.headers['x-requested-with'] == 'XMLHttpRequest') {
+//    res.send(JSON.stringify({
+//      'hello': 'world'
+//    }));
+//  } else {
+//    next();
+//  }
+//});
 
 // Definiáljuk a szerver működését.
 app.get('/', function (req, res) {
