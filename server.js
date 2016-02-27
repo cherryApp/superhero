@@ -22,8 +22,13 @@ Users.setConnection( mongoose );
 //}, function( saved ) {
 //    console.info( "Saved model: ", saved );
 //});
-Users.first( {'role': 3}, function( user ) {
-   console.info( "User name: ", user.name );
+Users.first( { name: new RegExp('doe', 'i') }, function( user ) {
+    if ( user !== null ) {
+        console.info( "User name: ", user.name );
+    } else {
+        console.info( "No user!" );
+    }
+
 });
 
 // Globális változók.
