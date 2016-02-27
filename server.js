@@ -22,8 +22,8 @@ Users.setConnection( mongoose );
 //}, function( saved ) {
 //    console.info( "Saved model: ", saved );
 //});
-Users.read( {}, function( users ) {
-   console.info( "Users: ", users );
+Users.first( {'role': 3}, function( user ) {
+   console.info( "User name: ", user.name );
 });
 
 // Globális változók.
