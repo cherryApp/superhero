@@ -22,13 +22,23 @@ Users.setConnection( mongoose );
 //}, function( saved ) {
 //    console.info( "Saved model: ", saved );
 //});
-Users.first( { name: new RegExp('doe', 'i') }, function( user ) {
+Users.getModel().update(
+    { name: new RegExp('jason', 'i') },
+    { girlFriend: 'Mariann' },
+    function( err, user ) {
+        if ( err )
+            console.error( err );
+});
+Users.first( { name: new RegExp('jason', 'i') }, function( user ) {
     if ( user !== null ) {
         console.info( "User name: ", user.name );
     } else {
         console.info( "No user!" );
     }
-
+});
+Users.getModel().isAdmin( 2, function( err, data ) {
+    console.log( err );
+    console.log( data );
 });
 
 // Globális változók.
