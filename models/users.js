@@ -2,7 +2,9 @@
 var mongoose = require( "mongoose" );
 // Kezeli a megadott táblát.
 var db,
-    Users;
+    Users,
+    Orders,
+    models = {};
 function setConnection( mongodb ) {
     db = mongodb;
     setModel();
@@ -11,6 +13,7 @@ function setConnection( mongodb ) {
 // Kollekció modell.
 function setModel() {
 
+    // User schema.
     var Schema = mongoose.Schema;
     var userSchema = new Schema({
         name: String,
@@ -29,10 +32,15 @@ function setModel() {
 
     Users = db.model( 'Users', userSchema, 'Users' );
 
+    models['Users'] = Users;
 }
 
-function getModel() {
-    return Users;
+function getModel( modelName ) {
+    if ( !modelName ) {
+        return Users;
+    } else {
+        return models[modelName];
+    }
 }
 
 // Adatok olvasása a kollekcióból.

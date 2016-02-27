@@ -22,6 +22,16 @@ Users.setConnection( mongoose );
 //}, function( saved ) {
 //    console.info( "Saved model: ", saved );
 //});
+
+// Dokumentum törlés.
+Users.getModel().remove( {'name': new RegExp('jack', 'i')}, function( err, rem ) {
+    if ( err ) console.error( err );
+    else {
+        console.log( rem.result );
+    }
+});
+
+// Dokumentum frissítése.
 Users.getModel().update(
     { name: new RegExp('jason', 'i') },
     { girlFriend: 'Mariann' },
@@ -29,18 +39,23 @@ Users.getModel().update(
         if ( err )
             console.error( err );
 });
+
+// Első találat a feltételek alapján.
 Users.first( { name: new RegExp('jason', 'i') }, function( user ) {
     if ( user !== null ) {
-        console.info( "User name: ", user.name );
+        console.info( "User: ", user );
     } else {
         console.info( "No user!" );
     }
 });
+
+// Adminok visszaadása.
 Users.getModel().isAdmin( 2, function( err, data ) {
     console.log( err );
     console.log( data );
 });
 
+//////////////////////////////////////////////////////
 // Globális változók.
 var port = 3333;
 var staticDir = 'build';
@@ -48,7 +63,7 @@ var staticDir = 'build';
 // Létrehozunk egy express szerver példányt.
 var app = express();
 app.set('view engine', 'jade');
-app.set('views', './src/view')
+app.set('views', './src/view');
 
 // Statikus fájlok.
 app.use(express.static(staticDir));
