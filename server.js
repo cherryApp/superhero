@@ -9,18 +9,21 @@ mongoose.connect( 'mongodb://localhost/superhero' );
 // itf tábla model.
 var Users = require('./models/users');
 Users.setConnection( mongoose );
-Users.create( {
-    name: 'John Doe',
-    email: 'john.doe@gmail.com',
-    phone: '+3614563214',
-    address: '1122 Budapest, Kiss u. 10.',
-    role: 3,
-    meta: {
-        birthsday: new Date( '1994-07-04' ),
-        hobby: 'golf'
-    }
-}, function( saved ) {
-    console.info( "Saved model: ", saved );
+//Users.create( {
+//    name: 'John Doe',
+//    email: 'john.doe@gmail.com',
+//    phone: '+3614563214',
+//    address: '1122 Budapest, Kiss u. 10.',
+//    role: 3,
+//    meta: {
+//        birthsday: new Date( '1994-07-04' ),
+//        hobby: 'golf'
+//    }
+//}, function( saved ) {
+//    console.info( "Saved model: ", saved );
+//});
+Users.read( {}, function( users ) {
+   console.info( "Users: ", users );
 });
 
 // Globális változók.
