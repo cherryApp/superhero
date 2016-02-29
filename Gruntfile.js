@@ -12,7 +12,9 @@ module.exports = function (grunt) {
                     'src/vendor/jquery/dist/jquery.min.js',
                     'src/vendor/bootstrap/dist/js/bootstrap.min.js',
                     'src/vendor/angular/angular.js',
-                    'src/js/*.js'
+                    'src/vendor/angluar-currency-filter/currencyModule.js',
+                    'src/js/main.js',
+                    'src/js/controllers/*.js'
                     ],
                 dest: 'build/js/all.js'
             }
