@@ -7,59 +7,9 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/superhero');
 
 // itf tábla model.
-var Users = require('./models/users');
-Users.setConnection(mongoose);
-Users.create({
-    name: 'Jason Statham',
-    email: 'statham@gmail.com',
-    phone: '+3614563214',
-    address: '1122 Budapest, Kiss u. 10.',
-    role: 3,
-    meta: {
-        birthsday: new Date('1994-07-04'),
-        hobby: 'golf'
-    }
-}, function (saved) {
-    console.info("Saved model: ", saved);
-});
-
-// Dokumentum törlés.
-Users.getModel().remove({
-    'name': new RegExp('jack', 'i')
-}, function (err, rem) {
-    if (err) console.error(err);
-    else {
-        console.log(rem.result);
-    }
-});
-
-// Dokumentum frissítése.
-Users.getModel().update({
-        name: new RegExp('jason', 'i')
-    }, {
-        girlFriend: 'Mariann'
-    },
-    function (err, user) {
-        if (err)
-            console.error(err);
-    });
-
-// Első találat a feltételek alapján.
-Users.first({
-    name: new RegExp('jason', 'i')
-}, function (user) {
-    if (user !== null) {
-        console.info("User: ", user);
-    } else {
-        console.info("No user!");
-    }
-});
-
-// Adminok visszaadása.
-Users.getModel().isAdmin(2, function (err, data) {
-    console.log(err);
-    console.log(data);
-});
+var models = {};
+models.users = require('./models/users');
+models.users.setConnection(mongoose);
 
 //////////////////////////////////////////////////////
 // Globális változók.
@@ -74,12 +24,60 @@ app.set('views', './src/view');
 // Statikus fájlok.
 app.use(express.static(staticDir));
 
-app.use(function (req, res, next) {
+app.use('/:model/:id*?', function (req, res, next) {
+
 
     if (req.headers['x-requested-with'] == 'XMLHttpRequest') {
-        Users.getModel().find({}, function (err, data) {
-            res.send(JSON.stringify(data));
-        });
+
+        switch ( req.method.toLowerCase() ) {
+            case 'get':
+                models[req.params.model].getModel().find({}, function (err, data) {
+                    res.send(JSON.stringify(data));
+                });
+                break;
+            case 'post':
+                // Adatcsomagok fogadása.
+                var requestBody = '';
+                req.on( "data", function( package ) {
+                    requestBody += package;
+                });
+                req.on( "end", function() {
+                    requestBody = JSON.parse( requestBody );
+                    var newData = {};
+                    for ( var k in requestBody ) {
+                        if ( k == "_id" ) {
+                            continue;
+                        }
+                        newData[k] = requestBody[k];
+                    }
+                    models[req.params.model].getModel().update({
+                            _id: requestBody._id
+                        }, newData,
+                        function (err, user) {
+                            res.send( '{"success": true}' );
+                        });
+                });
+                break;
+            case 'delete':
+                if ( req.params.id ) {
+                    var where = { _id: req.params.id };
+                    models[req.params.model].getModel().remove(
+                        where,
+                        function (err, rem) {
+                            if (err) console.error(err);
+                            res.send( JSON.stringify(rem) );
+                        });
+                } else {
+                    res.send( '{"error": "no id"}' );
+                }
+                break;
+            default:
+                res.send( '{"error": "unsupported method"}' );
+
+        }
+
+
+
     } else {
         next();
     }

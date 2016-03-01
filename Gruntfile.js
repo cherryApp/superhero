@@ -46,6 +46,12 @@ module.exports = function (grunt) {
                         cwd: "src/",
                         src: ['vendor/**'],
                         dest: 'build/'
+                    },
+                    {
+                        expand: true,
+                        cwd: "src/vendor/bootstrap/",
+                        src: ['fonts/**'],
+                        dest: 'build/'
                     }
                 ]
             }
