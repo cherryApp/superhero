@@ -1,0 +1,27 @@
+table(class='table table-condensed')
+  thead
+    tr
+      th(data-ng-repeat='th in ths') {{th}}
+  tbody
+    tr(data-ng-repeat='row in users')
+      td {{row._id}}
+      td
+        input.form-control(data-ng-model='row.name')
+      td
+        input.form-control(data-ng-model='row.email')
+      td
+        input.form-control(data-ng-model='row.phone')
+      td
+        .btn-group(role='group')
+          button(
+            type='button'
+            class='btn btn-info'
+            data-ng-click='updateRecord(row)'
+          )
+            span(class='glyphicon glyphicon-refresh')
+          button(
+            type='button'
+            class='btn btn-danger'
+            data-ng-click='deleteUser(row)'
+          )
+            span(class='glyphicon glyphicon-remove')

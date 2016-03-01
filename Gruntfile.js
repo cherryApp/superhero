@@ -43,12 +43,6 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
-                        cwd: "src/",
-                        src: ['vendor/**'],
-                        dest: 'build/'
-                    },
-                    {
-                        expand: true,
                         cwd: "src/vendor/bootstrap/",
                         src: ['fonts/**'],
                         dest: 'build/'
@@ -92,7 +86,8 @@ module.exports = function (grunt) {
                 files: {
                     'build/css/all.min.css': [
                         'src/vendor/bootstrap/dist/css/bootstrap.min.css',
-                        'src/vendor/bootstrap/dist/css/bootstrap-theme.min.css'
+                        'src/vendor/bootstrap/dist/css/bootstrap-theme.min.css',
+                        'src/css/**/*.css'
                     ]
                 }
             }

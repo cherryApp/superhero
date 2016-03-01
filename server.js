@@ -30,11 +30,13 @@ app.use('/:model/:id*?', function (req, res, next) {
     if (req.headers['x-requested-with'] == 'XMLHttpRequest') {
 
         switch ( req.method.toLowerCase() ) {
+            // READ
             case 'get':
                 models[req.params.model].getModel().find({}, function (err, data) {
                     res.send(JSON.stringify(data));
                 });
                 break;
+            // UPDATE
             case 'post':
                 // Adatcsomagok fogadása.
                 var requestBody = '';
@@ -58,6 +60,28 @@ app.use('/:model/:id*?', function (req, res, next) {
                         });
                 });
                 break;
+            // CREATE
+            case 'put':
+                // Adatcsomagok fogadása.
+                var requestBody = '';
+                req.on( "data", function( package ) {
+                    requestBody += package;
+                });
+                req.on( "end", function() {
+                    requestBody = JSON.parse( requestBody );
+                    var row = {};
+                    for ( var k in requestBody ) {
+                        if ( k == "_id" ) {
+                            continue;
+                        }
+                        row[k] = requestBody[k];
+                    }
+                    models[req.params.model].create( row, function( data ) {
+                        res.send( JSON.stringify( data ) );
+                    });
+                });
+                break;
+            // DELETE
             case 'delete':
                 if ( req.params.id ) {
                     var where = { _id: req.params.id };

@@ -19,7 +19,22 @@ block content
               tr
                 th(data-ng-repeat='th in ths') {{th}}
             tbody
-              tr(data-ng-repeat='row in users')
+              // New user
+              tr
+                td(data-ng-repeat='th in ths')
+                  input.form-control(
+                    data-ng-if='!$last && !$first'
+                    data-ng-model='newUser[th]'
+                    data-ng-class='{\'is-error\': formError[th]}'
+                  )
+                  button(
+                    data-ng-if='$last'
+                    type='button'
+                    class='btn btn-success'
+                    data-ng-click='insertRecord(newUser)'
+                  )
+                    span(class='glyphicon glyphicon-fire')
+              tr(data-ng-repeat='row in users track by $index')
                 td {{row._id}}
                 td
                   input.form-control(data-ng-model='row.name')
