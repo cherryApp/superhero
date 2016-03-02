@@ -6,18 +6,19 @@ block content
       h1= title
       .row(data-ng-controller='priceController')
         .col-xs-3
-          input.form-control(data-ng-model='yourPrice')
-          hr
-          p A te árad: {{calcOwnPrice(yourPrice) | currencyFilter}}
-          p Más ára: {{calcOtherPrice(yourPrice) | currencyFilter}}
-          p Teljes ár: {{yourPrice | currencyFilter}}
+          div(data-calc-brutto='1', data-amount='yourPrice')
+          p Ár:
+            span(data-ng-bind='yourPrice')
+            span !
       .row(data-ng-controller='userController')
         .col-xs-12
-          p {{yourPrice}}
-          table(class='table table-condensed')
+          table.users-table(
+            class='table table-condensed'
+            data-ng-show='showTable'
+          )
             thead
               tr
-                th(data-ng-repeat='th in ths') {{th}}
+                th(data-ng-repeat='th in ths', data-ng-bind='th')
             tbody
               // New user
               tr
@@ -35,7 +36,7 @@ block content
                   )
                     span(class='glyphicon glyphicon-fire')
               tr(data-ng-repeat='row in users track by $index')
-                td {{row._id}}
+                td(data-ng-bind='row._id')
                 td
                   input.form-control(data-ng-model='row.name')
                 td

@@ -1,32 +1,40 @@
 superhero.controller( "userController", [
     "$scope",
     "userService",
-    "userFactory",
-    function( $scope, userService, userFactory ) {
+    "$timeout",
+    function(
+        $scope,
+        userService,
+        $timeout
+    ) {
 
         // Felhasználók.
         $scope.users = [];
         $scope.ths = ['#', 'name', 'email', 'phone', 'actions'];
         $scope.newUser = {};
         $scope.formError = {};
+        $scope.showTable = false;
 
         // Felhasználók lekérése.
         userService.getAll()
             .then( function( userData ) {
                 $scope.users = userData;
+                $timeout( function() {
+                    $scope.showTable = true;
+                }, 500 );
             }, function( err ) {
                 console.error( "Error while getting user data: ", err );
             });
 
         // Egy felhaszánló lekérése.
-        userFactory.getOne( '56d712d38052bcec0b6c9ac9' )
+        userService.getOne( '56d712d38052bcec0b6c9ac9' )
             .then( function( user ) {
                 console.info( 'Orsi: ', user );
             });
 
         // Adatok frissítése.
         $scope.updateRecord = function( row ) {
-            userFactory.saveUser(row)
+            userService.saveUser(row)
                 .then( function() {
                     alert( "User saved!" );
                 });
@@ -34,7 +42,7 @@ superhero.controller( "userController", [
 
         // Adatsor törlése.
         $scope.deleteUser = function( row ) {
-            userFactory.deleteUser( row )
+            userService.deleteUser( row )
                 .then( function( deleted ) {
                     if ( deleted.ok ) {
                         var index = $scope.users.indexOf(row);
@@ -64,7 +72,7 @@ superhero.controller( "userController", [
         $scope.insertRecord = function( row ) {
             if ( !$scope.checkNewUser(row) )
                 return;
-            userFactory.insertUser( row )
+            userService.insertUser( row )
                 .then( function( newUser ) {
                     $scope.users.push( newUser );
                     $scope.newUser = {};
