@@ -1,25 +1,69 @@
 superhero.service( "userService", [
-    "userFactory",
+    "crudFactory",
     "$q",
-    function( userFactory, $q ) {
+    function( crudFactory, $q ) {
         var service = this;
         service.users = [];
+        service.modelName = 'users';
+
+        // Felhasználók lekérése.
         service.getAll = function() {
-
-            // Defer.
             var deferred = $q.defer();
-
-            if ( service.users.length < 1 ) {
-                userFactory.getAll()
-                    .then( function( users ) {
-                        service.users = users;
-                        deferred.resolve( users );
-                    });
-            } else {
-                deferred.resolve( service.users );
-            }
-
+            crudFactory.read( service.modelName )
+                .then( function( userData ) {
+                    deferred.resolve( userData );
+                }, function( err ) {
+                    deferred.reject( err );
+                });
             return deferred.promise;
-        }
+        };
+
+        // Egy felhaszánló lekérése.
+        service.getOne = function( id ) {
+            var deferred = $q.defer();
+            crudFactory.readOne( service.modelName, id )
+                .then( function( userData ) {
+                    deferred.resolve( userData );
+                }, function( err ) {
+                    deferred.reject( err );
+                });
+            return deferred.promise;
+        };
+
+        // Adatok frissítése.
+        service.saveUser = function( row ) {
+            var deferred = $q.defer();
+            crudFactory.update( service.modelName, row )
+                .then( function( userData ) {
+                    deferred.resolve( userData );
+                }, function( err ) {
+                    deferred.reject( err );
+                });
+            return deferred.promise;
+        };
+
+        // Adatsor törlése.
+        service.deleteUser = function( row ) {
+            var deferred = $q.defer();
+            crudFactory.delete( service.modelName, row )
+                .then( function( userData ) {
+                    deferred.resolve( userData );
+                }, function( err ) {
+                    deferred.reject( err );
+                });
+            return deferred.promise;
+        };
+
+        // Új record beszúrása.
+        service.insertUser = function( row ) {
+            var deferred = $q.defer();
+            crudFactory.create( service.modelName, row )
+                .then( function( userData ) {
+                    deferred.resolve( userData );
+                }, function( err ) {
+                    deferred.reject( err );
+                });
+            return deferred.promise;
+        };
     }
 ]);
