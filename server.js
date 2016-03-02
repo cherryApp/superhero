@@ -33,7 +33,8 @@ app.use(express.static(staticDir));
 
 app.use('/:model/:id*?', function (req, res, next) {
 
-    if (req.headers['x-requested-with'] == 'XMLHttpRequest') {
+    if (req.headers['x-requested-with'] == 'XMLHttpRequest'
+        && req.params.model !== 'templates') {
 
         switch ( req.method.toLowerCase() ) {
             // READ
@@ -106,6 +107,15 @@ app.use('/:model/:id*?', function (req, res, next) {
 
     } else {
         next();
+    }
+});
+
+// Template-ek kiszolgálása.
+app.get( '/templates/:name', function( req, res, next ) {
+    if ( !req.params.name ) {
+        next();
+    } else {
+        res.render( 'templates/'+req.params.name );
     }
 });
 
