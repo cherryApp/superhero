@@ -18,6 +18,12 @@ superhero.controller( "userController", [
                 console.error( "Error while getting user data: ", err );
             });
 
+        // Egy felhaszánló lekérése.
+        userFactory.getOne( '56d712d38052bcec0b6c9ac9' )
+            .then( function( user ) {
+                console.info( 'Orsi: ', user );
+            });
+
         // Adatok frissítése.
         $scope.updateRecord = function( row ) {
             userFactory.saveUser(row)
